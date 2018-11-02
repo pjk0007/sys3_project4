@@ -107,6 +107,7 @@ int resource::giveBack(string mn, int N_y, int N_m, int N_d)
 - Return 2 when you did not borrow this `Type`.
 
 #### book class
+```
 class book : public resource
 {
 	public :
