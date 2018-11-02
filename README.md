@@ -9,12 +9,12 @@ Read the `input.dat` file to store the vector declared as the member data type a
 Getting started
 -----
 ### What things you need to install and how to install
-Among the files to run the program, we need `main.cpp`, `library.cpp`, `resource.cpp`, `book.cup` and `memberc`.
+Among the files to run the program, we need `main.cpp`, `library.cpp`, `resource.cpp`, `member.cpp`.
 Required data files include `resource.dat` and `input.dat`.
 ### How to compile
 You can compile in two ways. The first method is as follows.
 ```
-$ g++ -std=c++11 -o start main.cpp library.cpp resource.cpp book.cpp member.cpp undergraduate.cpp
+$ g++ -std=c++11 -o start main.cpp library.cpp resource.cpp member.cpp
 ```
 Other methods can be made through `Makefile`.
 ```
@@ -58,7 +58,7 @@ Declares a vector for storing `resorce*` and `member*` data.
 Start the project by executing the function of `library()`
 
 ### rsource.h
-##### resource class
+#### resource class
 ```
 class resource
 {
@@ -106,7 +106,7 @@ int resource::giveBack(string mn, int N_y, int N_m, int N_d)
 - Return 1 when delayed return.
 - Return 2 when you did not borrow this `Type`.
 
-##### book class
+#### book class
 class book : public resource
 {
 	public :
@@ -116,7 +116,7 @@ class book : public resource
 The book class is inherited from the resource class.
 
 ### member.h
-##### member class
+#### member class
 ```
 class member
 {
@@ -167,7 +167,7 @@ void member::giveBack()
 This function is called when the giveback something is successful.
 Reduce `nowBorrow` by one as shown above.
 
-##### undergraduate class
+#### undergraduate class
 ```
 class undergraduate : public member
 {
