@@ -100,13 +100,6 @@ library::library()
 				cout << "1	";	// return code 1
 				cout << "Non exist resource." <<endl;
 			}
-			else if(tempMem->borrow(year, month, day)==1){
-				cout << "6	";
-				cout << "Restricted member until ";
-				cout << setw(2) << setfill('0') << tempMem->getYear()<<"/";
-				cout << setw(2) << setfill('0') << tempMem->getMonth()<<"/";
-				cout << setw(2) << setfill('0') << tempMem->getDay()<<endl;
-			}
 			else if(tempMem->borrow(year, month, day)==2){
 				cout << "2	";
 				cout << "Exceeds your possible number of borrow. Possible # of borrows: ";
@@ -136,6 +129,13 @@ library::library()
 					cout << "0	Success." <<endl;
 				}
 			
+			}
+			else if(tempMem->borrow(year, month, day)==1){
+				cout << "6	";
+				cout << "Restricted member until ";
+				cout << setw(2) << setfill('0') << tempMem->getYear()<<"/";
+				cout << setw(2) << setfill('0') << tempMem->getMonth()<<"/";
+				cout << setw(2) << setfill('0') << tempMem->getDay()<<endl;
 			}
 		}
 		else if(BorR[0]=='R'){
