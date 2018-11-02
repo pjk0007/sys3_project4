@@ -40,6 +40,8 @@ int main(){
 	return 0;
 }
 ```
+The main function declares only library clss.
+
 
 ### library
 ```
@@ -52,6 +54,9 @@ class library
 		library();
 };
 ```
+Declares a vector for storing `resorce*` and `member*` data.
+iStart the project by executing the function of `library()`
+
 ### rsource
 ```
 class resource
@@ -59,16 +64,16 @@ class resource
 	protected:
 		string res_Name;
 		string mem_Name;
-		string Type;
-		int B_year;
-		int B_month;
-		int B_day;
-		int R_year;
-		int R_month;
-		int R_day;
+		string Type;	// "book"
+		int B_year;	// borrow year
+		int B_month;	// borrow month
+		int B_day;	// borrow day
+		int R_year;	// return until year
+		int R_month;	// return until month
+		int R_day;	// return until day
 		int exist;	// 0 is already borrowed, 1 is exist in library
 	public:
-		resource(string rn, string T);
+		resource(string rn, string T);	//initialize
 		string getName();
 		string getType();
 		int getB_year();
@@ -83,32 +88,32 @@ class resource
 ```
 ```
 resource::resource(string rn, string T)
-{
-	res_Name = rn;
-	mem_Name = "NULL";
-	Type = T;
-	Type[0] = Type[0] - ('A'-'a');
-	B_year = 0;
-	B_month = 0;
-	B_day = 0;
-	R_year = 0;
-	R_month = 0;
-	R_day = 0;
-	exist = 1;
-}
 ```
+Creadte and initialize a resource of type `resource`
+
 ```
 int resource::borrow(string mn, int B_y, int B_m, int B_d, int R_y, int R_m, int R_d)
 ```
 Return 0 when borrow is success.
 Return 1 when you already borrowed this `Type` at B_y/B_m/B_d
 Return 2 when other member already borrowed this `Type`
+
 ```
 int resource::giveBack(string mn, int N_y, int N_m, int N_d)
 ```
 Return 0 when return is success.
 Return 1 when delayed return.
 Return 2 when you did not borrow this `Type`.
+
+### book
+```
+class book : public resource
+{
+	public :
+		book(string rn, string T) : resource(rn, T){}
+};
+```
+The book class is inherited from the resource class.
 
 ### member
 ```
@@ -117,14 +122,14 @@ class member
 	protected:
 		string mem_Name;
 		string Type;
-		int canBorrow;
-		int nowBorrow;
-		int ban_year;
-		int ban_month;
-		int ban_day;
+		int canBorrow;	// you can borrow # of resource
+		int nowBorrow;	// you borrow # of resource
+		int ban_year;	// you can borrow after ban_year
+		int ban_month;	// you can borrow after ban_month
+		int ban_day;	// you can borrow after ban_day
 		int term;		
 	public:
-		member(string mn, string T);
+		member(string mn, string T);	//initialize
 		string getName();
 		int getBorrow();
 		int getYear();
@@ -139,31 +144,37 @@ class member
 		void giveBack();
 };
 ```
+
 ```
 member::member(string mn, string T)
-{
-	mem_Name = mn;
-	Type = T;
-	nowBorrow = 0;
-	ban_year=0;
-	ban_month=0;
-	ban_day=0;
-}
 ```
+Creadte and initialize a member of type `member`
+
 ```
 int member::borrow(int n_y, int n_m, int n_d)
 ```
 Return 0 when you can borrow something.
 Return 1 when you are restricted member until ban_year/ban_month/ban_day
 Return 2 when exceeds your possible number of borrow.
-```
-void member::giveBack()
-```
-This function is called when the giveback something is successful.
-Reduce `nowBorrow` by one as shown below.
+
 ```
 void member::giveBack()
 {
 	nowBorrow--;
 }
 ```
+This function is called when the giveback something is successful.
+Reduce `nowBorrow` by one as shown above.
+
+### undergraduate
+```
+class undergraduate : public member
+{
+	public :
+		undergraduate(string rn, string T) : member(rn, T){
+			canBorrow = 1;
+			term = 13;
+		}
+};
+```
+The undergraduate class is inherited from the member class.
