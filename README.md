@@ -40,7 +40,7 @@ int main(){
 	return 0;
 }
 ```
-The main function declares only library clss.
+The main function declares only library class.
 
 
 ### library
@@ -54,8 +54,8 @@ class library
 		library();
 };
 ```
-Declares a vector for storing `resorce*` and `member*` data.
-iStart the project by executing the function of `library()`
+> Declares a vector for storing `resorce*` and `member*` data.
+> Start the project by executing the function of `library()`
 
 ### rsource
 ```
