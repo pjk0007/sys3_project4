@@ -95,14 +95,18 @@ Creadte and initialize a resource of type `resource`
 int resource::borrow(string mn, int B_y, int B_m, int B_d, int R_y, int R_m, int R_d)
 ```
 Return 0 when borrow is success.
+
 Return 1 when you already borrowed this `Type` at B_y/B_m/B_d
+
 Return 2 when other member already borrowed this `Type`
 
 ```
 int resource::giveBack(string mn, int N_y, int N_m, int N_d)
 ```
 Return 0 when return is success.
+
 Return 1 when delayed return.
+
 Return 2 when you did not borrow this `Type`.
 
 ### book
@@ -154,7 +158,9 @@ Creadte and initialize a member of type `member`
 int member::borrow(int n_y, int n_m, int n_d)
 ```
 Return 0 when you can borrow something.
+
 Return 1 when you are restricted member until ban_year/ban_month/ban_day
+
 Return 2 when exceeds your possible number of borrow.
 
 ```
@@ -178,3 +184,7 @@ class undergraduate : public member
 };
 ```
 The undergraduate class is inherited from the member class.
+
+Author
+--------------
+JuneKyu Park, Sungkyunkwan, Semiconductor System Engeering.
