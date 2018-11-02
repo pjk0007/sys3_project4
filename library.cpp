@@ -5,8 +5,6 @@
 #include "library.h"
 #include "member.h"
 #include "resource.h"
-#include "book.h"
-#include "undergraduate.h"
 using namespace std;
 
 

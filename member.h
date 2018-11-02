@@ -32,4 +32,13 @@ class member
 		void giveBack();
 };
 
+class undergraduate : public member
+{
+	public :
+		undergraduate(string rn, string T) : member(rn, T){
+			canBorrow = 1;
+			term = 13;
+		}
+};
+
 #endif

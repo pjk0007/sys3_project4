@@ -32,5 +32,10 @@ class resource
 };
 
 
+class book : public resource
+{
+	public :
+		book(string rn, string T) : resource(rn, T){}
+};
 
 #endif

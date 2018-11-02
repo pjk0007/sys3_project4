@@ -33,7 +33,7 @@ You can obtain a result of `output.dat` through the command.
 
 API
 --------
-### main
+### main.cpp
 ```
 int main(){
 	library *lab = new library();
@@ -43,7 +43,7 @@ int main(){
 The main function declares only library class.
 
 
-### library
+### library.h
 ```
 class library
 {
@@ -57,7 +57,8 @@ class library
 Declares a vector for storing `resorce*` and `member*` data.
 Start the project by executing the function of `library()`
 
-### rsource
+### rsource.h
+##### resource class
 ```
 class resource
 {
@@ -105,8 +106,7 @@ int resource::giveBack(string mn, int N_y, int N_m, int N_d)
 - Return 1 when delayed return.
 - Return 2 when you did not borrow this `Type`.
 
-### book
-```
+##### book class
 class book : public resource
 {
 	public :
@@ -115,7 +115,8 @@ class book : public resource
 ```
 The book class is inherited from the resource class.
 
-### member
+### member.h
+##### member class
 ```
 class member
 {
@@ -166,7 +167,7 @@ void member::giveBack()
 This function is called when the giveback something is successful.
 Reduce `nowBorrow` by one as shown above.
 
-### undergraduate
+##### undergraduate class
 ```
 class undergraduate : public member
 {
