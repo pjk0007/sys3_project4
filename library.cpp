@@ -30,8 +30,11 @@ library::library()
 	
 	while(fscanf(fp, "%s", buf1)!=EOF)
 	{
+		resType = buf1;
 		fscanf(fp, "%s", buf2);
-		RESLIST.push_back(new book(buf2, buf1));
+		if(resType=="Book"){
+			RESLIST.push_back(new book(buf2, buf1));
+		}
 	}
 	fclose(fp);
 
@@ -79,8 +82,10 @@ library::library()
 		memType = buf1;
 
 		if(MEMLIST.size()==0){
+			if(memType=="Undergraduate"){
 				MEMLIST.push_back(new undergraduate(buf2, buf1));
-				tempMem = MEMLIST.back();
+			}
+			tempMem = MEMLIST.back();
 		}
 		else{
 			for(i=0;i<MEMLIST.size();i++){
@@ -89,7 +94,9 @@ library::library()
 					break;
 				}
 				else{
-					MEMLIST.push_back(new undergraduate(buf2, buf1));
+					if(memType=="Undergraduate"){
+						MEMLIST.push_back(new undergraduate(buf2, buf1));
+					}
 					tempMem = MEMLIST.back();
 				}
 			}
