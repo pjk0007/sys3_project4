@@ -93,7 +93,7 @@ library::library()
 					tempMem = MEMLIST.at(i);
 					break;
 				}
-				else{
+				else if(i==MEMLIST.size()-1){
 					if(memType=="Undergraduate"){
 						MEMLIST.push_back(new undergraduate(buf2, buf1));
 					}
