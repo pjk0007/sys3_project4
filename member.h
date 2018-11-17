@@ -17,6 +17,12 @@ class member
 		int term;
 		int size;
 		int limit_size;
+
+		int room_time_limit;
+		int seat_time_limit;
+		int room;	// already borrowed 1, no borrowed 0
+		int seat;	// already borrowd 1, no borrowed 0
+
 		
 	public:
 		member(string mn, string T);
@@ -35,6 +41,9 @@ class member
 		int getSize();
 		int getLimitSize();
 		void setSize(int sz);
+
+		int getRoom();
+		int getSeat();
 };
 
 class undergraduate : public member
@@ -44,6 +53,7 @@ class undergraduate : public member
 			canBorrow = 1;
 			term = 13;
 			limit_size = 100;
+			seat_time_limit = 3;
 		}
 };
 
