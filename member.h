@@ -57,6 +57,7 @@ class member
 		int Return(string Space_type, int Space_number);
 		int Empty();
 		int Comeback();
+		void Reset();
 };
 
 class undergraduate : public member

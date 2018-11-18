@@ -40,6 +40,7 @@ library::library()
 	int Number_of_member;
 	int Time;
 	int Op, Op_;
+	int before_time;
 
 	int file_end1=1, file_end2=1;
 	int file_exist1, file_exist2;
@@ -48,8 +49,6 @@ library::library()
 	fp = fopen("resource.dat", "r");
 	fscanf(fp, "%s", buf1);
 	fscanf(fp, "%s", buf2);
-
-
 	
 	while(fscanf(fp, "%s", buf1)!=EOF)
 	{
@@ -167,6 +166,18 @@ library::library()
 			year = year1;
 			month = month1;
 			day = day1;
+			if(date1 > before_time){
+				for(int i=0;i<MEMLIST.size();i++){
+					MEMLIST.at(i)->Reset();
+				}
+				for(int i=0;i<11;i++){
+					study_rooms[i].reset();
+				}
+				for(int i=0;i<4;i++){
+					seats[i].reset();
+				}
+			}
+			before_time = year*360+month*12+day;
 			if(file_end2>0) fseek(fq, -13, SEEK_CUR);
 			fscanf(fp, "%s", buf1);
 			fscanf(fp, "%s", buf2);
@@ -356,6 +367,18 @@ library::library()
 			year = year2;
 			month = month2;
 			day = day2;
+			if(date2 > before_time){
+				for(int i=0;i<MEMLIST.size();i++){
+					MEMLIST.at(i)->Reset();
+				}
+				for(int i=0;i<11;i++){
+					study_rooms[i].reset();
+				}
+				for(int i=0;i<4;i++){
+					seats[i].reset();
+				}
+			}
+			before_time = (year%100)*360+month*12+day;
 
 			if(file_end1>0) fseek(fp, -8, SEEK_CUR);
 
@@ -404,8 +427,8 @@ library::library()
 			int Op1, Op2;
 			if(Operation=='B'){
 				if(Space_type=="StudyRoom" && Space_number>=1 && Space_number<=10){
-					Op=study_rooms[Space_number].borrow(memName, hour, Number_of_member, Time, 3);
 					if(tempMem->getRoom()==1 && tempMem->getRoom_Time()>hour) Op_=11;
+					else Op=study_rooms[Space_number].Borrow(memName, hour, Number_of_member, Time, 3);
 					if(Op==9){
 						Op1 = study_rooms[Space_number].getST();
 						Op2 = study_rooms[Space_number].getET();
@@ -415,8 +438,8 @@ library::library()
 					}
 				}
 				else if(Space_type=="Seat" && Space_number>=1 && Space_number<=3){
-					Op=seats[Space_number].borrow(memName, hour, Number_of_member, Time, tempMem->getTimeLimit());
 					if(tempMem->getSeat()==1 && tempMem->getSeat_Time()>hour) Op_=11;
+					else Op=seats[Space_number].Borrow(memName, hour, Number_of_member, Time, tempMem->getTimeLimit());
 					if(Op==9){
 						Op1 = seats[Space_number].getST();
 						Op2 = seats[Space_number].getET();
@@ -447,17 +470,18 @@ library::library()
 			}
 			else if(Operation=='R'){
 				if(Space_type=="StudyRoom" && Space_number>=1 && Space_number<=10){
-
+					Op=study_rooms[Space_number].Return(memName, hour);
 				}
 				else if(Space_type=="Seat" && Space_number>=1 && Space_number<=3){
-
+					Op=seats[Space_number].Return(memName, hour);
 				}
 				else Op=8;
+
+				if(Op==8) cout << "8	Invalid space id." <<endl;
+				else if(Op==10) cout << "10	You did not borrow this space." << endl;
+				else if(Op==0) cout << "Success." <<endl;
 			}
 			else if(Operation=='E'){
-				if(Space_type=="StudyRoom" && Space_number>=1 && Space_number<=10){
-
-				}
 				else if(Space_type=="Seat" && Space_number>=1 && Space_number<=3){
 
 				}
