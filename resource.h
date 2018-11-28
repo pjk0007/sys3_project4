@@ -38,4 +38,27 @@ class book : public resource
 		book(string rn, string T) : resource(rn, T){}
 };
 
+class magazine : public resource
+{
+	public :
+		magazine(string rn, string T) :resource(rn,T){}
+};
+
+class e_book : public resource
+{
+	protected :
+		int size;
+	
+	public :
+		e_book(string rn, string T, int sz) : resource(rn, T){
+			size = sz;
+		}
+		int borrow(string mn, int B_y, int B_m, int B_d, int R_y, int R_m, int R_d){
+			resource :: borrow(mn, B_y, B_m, B_d, R_y, R_m, R_d);
+			exist=1;
+		}
+		int getSize();
+
+};
+
 #endif

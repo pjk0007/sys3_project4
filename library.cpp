@@ -35,6 +35,31 @@ library::library()
 		if(resType=="Book"){
 			RESLIST.push_back(new book(buf2, buf1));
 		}
+		else if(resType=="Magazine"){
+			RESLIST.push_back(new magazine(buf2, buf1));
+		}
+		else if(resType=="E-book"){
+			char tmp_buf[100];
+			int len_size=0;
+			int buf2_size;
+			int flag=0;
+			for(int i=0;;i++){
+				if(buf2[i]==']'){
+					tmp_buf[len_size]='\0';
+					break;
+				}
+				if(flag==1){
+					tmp_buf[len_size]=buf2[i];
+					len_size++;
+				}
+				if(buf2[i]=='['){
+					flag=1;
+					buf2_size=i;
+				}
+			}
+			buf2[buf2_size]='\0';
+			RESLIST.push_back(new e_book(buf2,buf1,atoi(tmp_buf)));
+		}
 	}
 	fclose(fp);
 
