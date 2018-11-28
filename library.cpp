@@ -44,7 +44,8 @@ library::library()
 
 	int file_end1=1, file_end2=1;
 	int file_exist1, file_exist2;
-	
+
+	int exception;	
 
 	fp = fopen("resource.dat", "r");
 	fscanf(fp, "%s", buf1);
@@ -252,114 +253,163 @@ library::library()
 			memName = buf2;
 			memType = buf1;
 	
-			if(MEMLIST.size()==0){
-				if(memType=="Undergraduate"){
-					MEMLIST.push_back(new undergraduate(buf2, buf1));
+			exception=0;
+			try{	
+				int name_num=0;
+				for(int c=0;c<memName.length();c++){
+					if(memName.at(c)>='0' && memName.at(c) <='9') name_num++;
 				}
-				else if(memType=="Graduate"){
-					MEMLIST.push_back(new graduate(buf2, buf1));
+				if(year*360+month*30+day <= 9*360+12*30+30){
+					exception=1;
+					throw exception;	//Date out of range
 				}
-				else if(memType=="Faculty"){
-					MEMLIST.push_back(new faculty(buf2, buf1));
+				else if(BorR[0]!='B' && BorR[0]!='R'){
+					exception=3;
+					throw exception;	//None-exist operation
 				}
-				tempMem = MEMLIST.back();
-				exist = 0;
-			}
-			else{
-				for(i=0;i<MEMLIST.size();i++){
-					if(MEMLIST.at(i)->getName() == memName){
-						tempMem = MEMLIST.at(i);
-						break;
+				else if(memType!="Undergraduate" && memType!= "Graduate" && memType!="Faculty"){
+					exception=4;	//None-exist member type
+					throw exception;
+				}
+				else if(name_num!=0){
+					exception=5;	//Member name with nebers
+					throw exception;
+				}
+				else if(year<0 || month<0 || day<0){
+					exception=6;	//Negative time;
+					throw exception;
+				}
+
+				if(MEMLIST.size()==0){
+					if(memType=="Undergraduate"){
+						MEMLIST.push_back(new undergraduate(buf2, buf1));
 					}
-					else if(i==MEMLIST.size()-1){
-						if(memType=="Undergraduate"){
-							MEMLIST.push_back(new undergraduate(buf2, buf1));
-						}
-						else if(memType=="Graduate"){
-							MEMLIST.push_back(new graduate(buf2, buf1));
-						}
-						else if(memType=="Faculty"){
-							MEMLIST.push_back(new faculty(buf2, buf1));
-						}
-						tempMem = MEMLIST.back();
+					else if(memType=="Graduate"){
+						MEMLIST.push_back(new graduate(buf2, buf1));
 					}
-				}
-			}
-	
-			if(BorR[0]=='B'){
-				if(exist==0){
-					cout << "1	";	// return code 1
-					cout << "Non exist resource." <<endl;
-				}
-				else if(tempRes->getType()!="e-book" && tempMem->borrow(year, month, day)==2){
-					cout << "2	";
-					cout << "Exceeds your possible number of borrow. Possible # of borrows: ";
-					cout << tempMem->getBorrow() << endl;
-				}
-				else if(tempMem->borrow(year, month, day)==0){
-					b_year = (year*360+month*30+day + tempMem->getTerm()) / 360;
-					b_month = ((year*360+month*30+day + tempMem->getTerm()) - b_year*360) / 30;
-					b_day = ((year*360+month*30+day + tempMem->getTerm()) - b_year*360 - b_month*30);
-					if(tempRes->borrow(tempMem->getName(), year, month, day, b_year, b_month, b_day)==1){
-						cout << "4	";
-						cout << "You already borrowed this ";
-						cout << setw(2) << setfill('0') << tempRes->getB_year() <<"/";
-						cout << setw(2) << setfill('0') << tempRes->getB_month() <<"/";
-						cout << setw(2) << setfill('0') << tempRes->getB_day() << endl;
+					else if(memType=="Faculty"){
+						MEMLIST.push_back(new faculty(buf2, buf1));
 					}
-					else if(tempRes->getType()!="e-book" && tempRes->borrow(tempMem->getName(), year, month, day, b_year, b_month, b_day)==2){
-						cout << "5	";
-						cout << "Other member already borrowed this ";
-						cout << tempRes->getType()<<". This " << tempRes->getType() <<" will be returned at ";
-						cout << setw(2) << setfill('0') << tempRes->getR_year() <<"/";
-						cout <<	setw(2) << setfill('0') << tempRes->getR_month()<<"/";
-						cout <<	setw(2) << setfill('0') << tempRes->getR_day() <<endl;
-					}
-					else if(tempRes->getType()=="e-book" && tempMem->getLimitSize() < (tempMem->getSize()+tempRes->getSize())){
-						cout << "15	Exceeds your storage capacity." << endl;
-					}
-					else {
-						if(tempRes->getType()!="e-book"){
-							tempMem->setBorrow(tempMem->getBorrow()+1);
-						}
-						else{
-							tempMem->setSize(tempMem->getSize()+tempRes->getSize());
-						}
-						cout << "0	Success." <<endl;
-					}
-				
-				}
-				else if(tempMem->borrow(year, month, day)==1){
-					cout << "6	";
-					cout << "Restricted member until ";
-					cout << setw(2) << setfill('0') << tempMem->getYear()<<"/";
-					cout << setw(2) << setfill('0') << tempMem->getMonth()<<"/";
-					cout << setw(2) << setfill('0') << tempMem->getDay()<<endl;
-				}
-			}
-			else if(BorR[0]=='R'){
-				if(tempRes->giveBack(tempMem->getName(), year, month, day) == 0){
-					tempMem->giveBack();
-					cout << "0	Success." <<endl;
-				}
-				else if(tempRes->giveBack(tempMem->getName(), year, month, day) == 2){
-					cout << "3	You did not borrow this "<< tempRes->getType() <<"."<<endl;
+					tempMem = MEMLIST.back();
+					exist = 0;
 				}
 				else{
-					result = year*360 + month*30 + day - tempRes->getR_year()*360 - tempRes->getR_month()*30 - tempRes->getR_day();
-					b_year = (year*360+month*30+day + result) / 360;
-					b_month = ((year*360+month*30+day + result) - b_year*360) / 30;
-					b_day = ((year*360+month*30+day + result) - b_year*360 - b_month*30);
+					for(i=0;i<MEMLIST.size();i++){
+						if(MEMLIST.at(i)->getName() == memName){
+							tempMem = MEMLIST.at(i);
+							break;
+							tempMem = MEMLIST.back();
+						}
+					
+						else if(i==MEMLIST.size()-1){
+							if(memType=="Undergraduate"){
+								MEMLIST.push_back(new undergraduate(buf2, buf1));
+							}
+							else if(memType=="Graduate"){
+								MEMLIST.push_back(new graduate(buf2, buf1));
+							}
+							else if(memType=="Faculty"){
+								MEMLIST.push_back(new faculty(buf2, buf1));
+							}
+							tempMem = MEMLIST.back();
+						}
+					}
+				}
+			
 	
-					tempMem->setYear(b_year);
-					tempMem->setMonth(b_month);
-					tempMem->setDay(b_day);
-					tempMem->giveBack();
+<<<<<<< HEAD
+				if(BorR[0]=='B'){
+					if(exist==0){
+						cout << "1	";	// return code 1
+						cout << "Non exist resource." <<endl;
+					}
+					else if(tempRes->getType()!="e-book" && tempMem->borrow(year, month, day)==2){
+						cout << "2	";
+						cout << "Exceeds your possible number of borrow. Possible # of borrows: ";
+						cout << tempMem->getBorrow() << endl;
+					}
+					else if(tempMem->borrow(year, month, day)==0){
+						b_year = (year*360+month*30+day + tempMem->getTerm()) / 360;
+						b_month = ((year*360+month*30+day + tempMem->getTerm()) - b_year*360) / 30;
+						b_day = ((year*360+month*30+day + tempMem->getTerm()) - b_year*360 - b_month*30);
+						if(tempRes->borrow(tempMem->getName(), year, month, day, b_year, b_month, b_day)==1){
+							cout << "4	";
+							cout << "You already borrowed this ";
+							cout << setw(2) << setfill('0') << tempRes->getB_year() <<"/";
+							cout << setw(2) << setfill('0') << tempRes->getB_month() <<"/";
+							cout << setw(2) << setfill('0') << tempRes->getB_day() << endl;
+						}
+						else if(tempRes->getType()!="e-book" && tempRes->borrow(tempMem->getName(), year, month, day, b_year, b_month, b_day)==2){
+							cout << "5	";
+							cout << "Other member already borrowed this ";
+							cout << tempRes->getType()<<". This " << tempRes->getType() <<" will be returned at ";
+							cout << setw(2) << setfill('0') << tempRes->getR_year() <<"/";
+							cout <<	setw(2) << setfill('0') << tempRes->getR_month()<<"/";
+							cout <<	setw(2) << setfill('0') << tempRes->getR_day() <<endl;
+						}
+						else if(tempRes->getType()=="e-book" && tempMem->getLimitSize() < (tempMem->getSize()+tempRes->getSize())){
+							cout << "15	Exceeds your storage capacity." << endl;
+						}
+						else {
+							if(tempRes->getType()!="e-book"){
+								tempMem->setBorrow(tempMem->getBorrow()+1);
+							}
+							else{
+								tempMem->setSize(tempMem->getSize()+tempRes->getSize());
+							}
+							cout << "0	Success." <<endl;
+						}
+					}
+					else if(tempMem->borrow(year, month, day)==1){
+						cout << "6	";
+						cout << "Restricted member until ";
+						cout << setw(2) << setfill('0') << tempMem->getYear()<<"/";
+						cout << setw(2) << setfill('0') << tempMem->getMonth()<<"/";
+						cout << setw(2) << setfill('0') << tempMem->getDay()<<endl;
+					}
 	
-					cout << "7	Delayed return. You'll be restricted until ";
-					cout << setw(2) << setfill('0') << tempMem->getYear() <<"/";	
-					cout << setw(2) << setfill('0') << tempMem->getMonth() <<"/";	
-					cout << setw(2) << setfill('0') << tempMem->getDay()<<endl;
+				}
+				else if(BorR[0]=='R'){
+					if(tempRes->giveBack(tempMem->getName(), year, month, day) == 0){
+						tempMem->giveBack();
+>>>>>>> add opcode -1 by try-catch (practice 1)
+						cout << "0	Success." <<endl;
+					}
+					else if(tempRes->giveBack(tempMem->getName(), year, month, day) == 2){
+						cout << "3	You did not borrow this "<< tempRes->getType() <<"."<<endl;
+					}
+					else{
+						result = year*360 + month*30 + day - tempRes->getR_year()*360 - tempRes->getR_month()*30 - tempRes->getR_day();
+						b_year = (year*360+month*30+day + result) / 360;
+						b_month = ((year*360+month*30+day + result) - b_year*360) / 30;
+						b_day = ((year*360+month*30+day + result) - b_year*360 - b_month*30);
+		
+						tempMem->setYear(b_year);
+						tempMem->setMonth(b_month);
+						tempMem->setDay(b_day);
+						tempMem->giveBack();
+		
+						cout << "7	Delayed return. You'll be restricted until ";
+						cout << setw(2) << setfill('0') << tempMem->getYear() <<"/";	
+						cout << setw(2) << setfill('0') << tempMem->getMonth() <<"/";	
+						cout << setw(2) << setfill('0') << tempMem->getDay()<<endl;
+					}
+				}
+			}catch(int expn){
+				if(exception==1){
+					cout<< "-1	Date out of range"<<endl;
+				}
+				else if(exception==3){
+					cout<< "-1	Non-exist operation"<<endl;
+				}
+				else if(exception==4){
+					cout<< "-1	Non-exist member type"<<endl;
+				}
+				else if(exception==5){
+					cout<< "-1	Member name with numbers"<<endl;
+				}
+				else if(exception==6){
+					cout<< "-1	Nagative time"<<endl;
 				}
 			}
 		}
@@ -393,27 +443,6 @@ library::library()
 			fscanf(fq, "%s", buf4);
 			memName = buf4;
 			
-			if(MEMLIST.size()==0){
-				if(memType=="Undergraduate"){
-					MEMLIST.push_back(new undergraduate(buf4, buf3));
-				}
-				tempMem = MEMLIST.back();
-			}
-			else{
-				for(i=0;i<MEMLIST.size();i++){
-					if(MEMLIST.at(i)->getName() == memName){
-						tempMem = MEMLIST.at(i);
-						break;
-					}
-					else if(i==MEMLIST.size()-1){
-						if(memType=="Undergraduate"){
-							MEMLIST.push_back(new undergraduate(buf4, buf3));
-						}
-						tempMem = MEMLIST.back();
-					}
-				}
-			}
-
 			if(Operation=='B'){
 				fscanf(fq, "%s", buf3);
 				Number_of_member = atoi(buf3);
@@ -421,89 +450,162 @@ library::library()
 				Time = atoi(buf3);
 			}
 
-			Op=0;
-			Op_=0;
-
-			int Op1, Op2;
-			if(Operation=='B'){
-				if(Space_type=="StudyRoom" && Space_number>=1 && Space_number<=10){
-					if(tempMem->getRoom()==1 && tempMem->getRoom_Time()>hour) Op_=11;
-					else Op=study_rooms[Space_number].Borrow(memName, hour, Number_of_member, Time, 3);
-					if(Op==9){
-						Op1 = study_rooms[Space_number].getST();
-						Op2 = study_rooms[Space_number].getET();
-					}
-					else if(Op==14){
-						Op1 = study_rooms[Space_number].getRT();
-					}
+			exception=0;
+			try{
+				int name_num=0;
+				for(int c=0;c<memName.length();c++){
+					if(memName.at(c)>='0' && memName.at(c) <='9') name_num++;
 				}
-				else if(Space_type=="Seat" && Space_number>=1 && Space_number<=3){
-					if(tempMem->getSeat()==1 && tempMem->getSeat_Time()>hour) Op_=11;
-					else Op=seats[Space_number].Borrow(memName, hour, Number_of_member, Time, tempMem->getTimeLimit());
-					if(Op==9){
-						Op1 = seats[Space_number].getST();
-						Op2 = seats[Space_number].getET();
-					}
-					else if(Op==14){
-						Op1 = seats[Space_number].getRT();
-					}
+				if((year%100)*360+month*30+day <= 9*360+12*30+30){
+					exception=1;
+					throw exception;	//Date out of range
 				}
-				else Op=8;
-
+				else if(Space_type!="Seat" && Space_type!="StudyRoom"){
+					exception=2;		//Non-exist space type
+					throw exception;
+				}
+				else if(Operation!='B' && Operation!='R' && Operation!='E' && Operation!='C'){
+					exception=3;
+					throw exception;	//Non-exist operation
+				}
+				else if(memType!="Undergraduate" && memType!= "Graduate" && memType!="Faculty"){
+					exception=4;	//Non-exist member type
+					throw exception;
+				}
+				else if(name_num!=0){
+					exception=5;	//Member name with numbers
+					throw exception;
+				}
+				else if(year<0 || month<0 || day<0 || hour<0){
+					exception=6;	//Negative time;
+					throw exception;
+				}
 				
-				if(Op==8) cout<< "8	Invalid space id." << endl;
-				else if(Op==9) {
-					cout << "9	This space is not available now. Available from "; 
-					cout << setw(2) << setfill('0') << Op1 << " to ";
-					cout << setw(2) << setfill('0') << Op2 <<"."<<endl;	
+				if(MEMLIST.size()==0){
+					if(memType=="Undergraduate"){
+						MEMLIST.push_back(new undergraduate(buf4, buf3));
+					}
+					tempMem = MEMLIST.back();
 				}
-				else if(Op_==11) cout <<"11	You already borrowed this kind of space."<<endl;
-				else if(Op==12) cout << "12	Exceed available number." <<endl;
-				else if(Op==13) cout << "13	Exceed available time."<<endl;
-				else if(Op==14) cout << "14	There is no remain space. This space is available after "<< Op1<<"."<<endl;
-				else if(Op==0){
-					tempMem->Borrow(Space_type, Space_number, hour+Time);
-				       	cout << "0	Success." <<endl;
+				else{
+					for(i=0;i<MEMLIST.size();i++){
+						if(MEMLIST.at(i)->getName() == memName){
+							tempMem = MEMLIST.at(i);
+							break;
+						}
+						else if(i==MEMLIST.size()-1){
+							if(memType=="Undergraduate"){
+								MEMLIST.push_back(new undergraduate(buf4, buf3));
+							}
+							tempMem = MEMLIST.back();
+						}
+					}
 				}
 
-
-			}
-			else if(Operation=='R'){
-				if(Space_type=="StudyRoom" && Space_number>=1 && Space_number<=10){
-					Op=study_rooms[Space_number].Return(memName, hour);
-					tempMem->Return(Space_type);
+				Op=0;
+				Op_=0;
+	
+				int Op1, Op2;
+				if(Operation=='B'){
+					if(Space_type=="StudyRoom" && Space_number>=1 && Space_number<=10){
+						if(tempMem->getRoom()==1 && tempMem->getRoom_Time()>hour) Op_=11;
+						else Op=study_rooms[Space_number].Borrow(memName, hour, Number_of_member, Time, 3);
+						if(Op==9){
+							Op1 = study_rooms[Space_number].getST();
+							Op2 = study_rooms[Space_number].getET();
+						}
+						else if(Op==14){
+							Op1 = study_rooms[Space_number].getRT();
+						}
+					}
+					else if(Space_type=="Seat" && Space_number>=1 && Space_number<=3){
+						if(tempMem->getSeat()==1 && tempMem->getSeat_Time()>hour) Op_=11;
+						else Op=seats[Space_number].Borrow(memName, hour, Number_of_member, Time, tempMem->getTimeLimit());
+						if(Op==9){
+							Op1 = seats[Space_number].getST();
+							Op2 = seats[Space_number].getET();
+						}
+						else if(Op==14){
+							Op1 = seats[Space_number].getRT();
+						}
+					}
+					else Op=8;
+	
+					
+					if(Op==8) cout<< "8	Invalid space id." << endl;
+					else if(Op==9) {
+						cout << "9	This space is not available now. Available from "; 
+						cout << setw(2) << setfill('0') << Op1 << " to ";
+						cout << setw(2) << setfill('0') << Op2 <<"."<<endl;	
+					}
+					else if(Op_==11) cout <<"11	You already borrowed this kind of space."<<endl;
+					else if(Op==12) cout << "12	Exceed available number." <<endl;
+					else if(Op==13) cout << "13	Exceed available time."<<endl;
+					else if(Op==14) cout << "14	There is no remain space. This space is available after "<< Op1<<"."<<endl;
+					else if(Op==0){
+						tempMem->Borrow(Space_type, Space_number, hour+Time);
+					       	cout << "0	Success." <<endl;
+					}
+	
+	
 				}
-				else if(Space_type=="Seat" && Space_number>=1 && Space_number<=3){
-					Op=seats[Space_number].Return(memName, hour);
-					tempMem->Return(Space_type);
+				else if(Operation=='R'){
+					if(Space_type=="StudyRoom" && Space_number>=1 && Space_number<=10){
+						Op=study_rooms[Space_number].Return(memName, hour);
+						tempMem->Return(Space_type);
+					}
+					else if(Space_type=="Seat" && Space_number>=1 && Space_number<=3){
+						Op=seats[Space_number].Return(memName, hour);
+						tempMem->Return(Space_type);
+					}
+					else Op=8;
+	
+					if(Op==8) cout << "8	Invalid space id." <<endl;
+					else if(Op==10) cout << "10	You did not borrow this space." << endl;
+					else if(Op==0) cout << "0	Success." <<endl;
 				}
-				else Op=8;
-
-				if(Op==8) cout << "8	Invalid space id." <<endl;
-				else if(Op==10) cout << "10	You did not borrow this space." << endl;
-				else if(Op==0) cout << "0	Success." <<endl;
-			}
-			else if(Operation=='E'){
-				if(Space_type=="Seat" && Space_number>=1 && Space_number<=3){
-					Op=seats[Space_number].Empty(memName, hour);
-					if(Op==0) tempMem->Empty(Space_type, hour);	
+				else if(Operation=='E'){
+					if(Space_type=="Seat" && Space_number>=1 && Space_number<=3){
+						Op=seats[Space_number].Empty(memName, hour);
+						if(Op==0) tempMem->Empty(Space_type, hour);	
+					}
+					else Op=8;
+	
+					if(Op==8) cout << "8	Invalid space id." <<endl;
+					else if(Op==10) cout << "10	You did not borrow this space." << endl;
+					else if(Op==0) cout << "0	Success." <<endl;
 				}
-				else Op=8;
-
-				if(Op==8) cout << "8	Invalid space id." <<endl;
-				else if(Op==10) cout << "10	You did not borrow this space." << endl;
-				else if(Op==0) cout << "0	Success." <<endl;
-			}
-			else if(Operation=='C'){
-				if(Space_type=="Seat" && Space_number>=1 && Space_number<=3){
-					Op=seats[Space_number].Comeback(memName, hour);	
-					if(Op==0) tempMem->Comeback(Space_type);	
+				else if(Operation=='C'){
+						if(Space_type=="Seat" && Space_number>=1 && Space_number<=3){
+						Op=seats[Space_number].Comeback(memName, hour);	
+						if(Op==0) tempMem->Comeback(Space_type);	
+					}
+					else Op=8;
+		
+					if(Op==8) cout << "8	Invalid space id." <<endl;
+					else if(Op==10) cout << "10	You did not borrow this space." << endl;
+					else if(Op==0) cout << "0	Success." <<endl;
 				}
-				else Op=8;
+			}catch(int expn){
+				if(exception==1){
+					cout<< "-1	Date out of range"<<endl;
+				}
+				else if(exception==2){
+					cout<< "-1	Non-exist space type"<<endl;
+				}
+				else if(exception==3){
+					cout<< "-1	Non-exist operation"<<endl;
+				}
+				else if(exception==4){
+					cout<< "-1	Non-exist member type"<<endl;
+				}
+				else if(exception==5){
+					cout<< "-1	Member name with numbers"<<endl;
+				}
+				else if(exception==6){
+					cout<< "-1	Nagative time"<<endl;
+				}
 
-				if(Op==8) cout << "8	Invalid space id." <<endl;
-				else if(Op==10) cout << "10	You did not borrow this space." << endl;
-				else if(Op==0) cout << "0	Success." <<endl;
 			}
 		}
 
