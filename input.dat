@@ -9,3 +9,17 @@ Date[yy/mm/dd]	Resource_type	Resource_name	Operation	Member_type	Member_name
 19/04/06	Book	Cosmos	B	Undergraduate	BruceLee
 19/04/07	Book	Cosmos	R	Undergraduate	BruceLee
 19/04/08	Book	Sapiens	R	Undergraduate	BruceLee
+19/04/09	E-book	X1	B	Undergraduate	BruceLee
+19/04/09	E-book	X2	B	Undergraduate	BruceLee
+19/04/09	E-book	X3	B	Undergraduate	BruceLee
+19/04/09	E-book	X4	B	Undergraduate	BruceLee
+20/04/09	E-book	X3	R	Undergraduate	BruceLee
+20/04/09	E-book	X2	R	Undergraduate	BruceLee
+20/04/09	E-book	X1	B	Undergraduate	BruceLee
+20/04/09	E-book	X2	B	Undergraduate	BruceLee
+20/04/09	Magazine	Newton[19/08]	B	Graduate	JK
+20/04/09	Magazine	Newton[19/05]	B	Graduate	JK
+20/04/09	Book	Cosmos	B	Graduate	JK
+20/04/09	Magazine	Newton[19/06]	B	Graduate	JK
+20/04/09	Magazine	Newton[19/10]	B	Graduate	JK
+20/04/09	Magazine	Newton[20/01]	B	Graduate	JK
