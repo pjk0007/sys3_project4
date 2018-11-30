@@ -15,6 +15,8 @@ class member
 		int ban_month;
 		int ban_day;
 		int term;
+		int size;
+		int limit_size;
 		
 	public:
 		member(string mn, string T);
@@ -30,6 +32,9 @@ class member
 		void setDay(int d);
 		int borrow(int n_y, int n_m, int n_d);
 		void giveBack();
+		int getSize();
+		int getLimitSize();
+		void setSize(int sz);
 };
 
 class undergraduate : public member
@@ -38,6 +43,8 @@ class undergraduate : public member
 		undergraduate(string rn, string T) : member(rn, T){
 			canBorrow = 1;
 			term = 13;
+			size=0;
+			limit_size = 100;
 		}
 };
 

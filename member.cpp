@@ -81,3 +81,19 @@ void member::giveBack()
 {
 	nowBorrow--;
 }
+
+int member::getSize()
+{
+	return size;
+}
+
+int member::getLimitSize()
+{
+	return limit_size;
+}
+
+void member::setSize(int sz)
+{
+	size = sz;
+}
+

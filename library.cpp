@@ -156,8 +156,14 @@ library::library()
 					cout << setw(2) << setfill('0') << tempRes->getR_month()<<"/";
 					cout << setw(2) << setfill('0') << tempRes->getR_day() <<endl;
 				}
+				else if(tempRes->getType()=="E-book" && tempMem->getLimitSize() < (tempMem->getSize()+tempRes->getSize())){
+					cout << "15	Exceeds your storage capacity." << endl;
+				}
 				else {
-					tempMem->setBorrow(tempMem->getBorrow()+1);
+					if(tempRes->getType()!="E-book")
+						tempMem->setBorrow(tempMem->getBorrow()+1);
+					else
+						tempMem->setSize(tempMem->getSize()+tempMem->getSize());
 					cout << "0	Success." <<endl;
 				}
 			

@@ -97,7 +97,7 @@ int resource::giveBack(string mn, int N_y, int N_m, int N_d)
 	}
 }
 
-int e_book::getSize()
+int resource::getSize()
 {
 	return size;
 }

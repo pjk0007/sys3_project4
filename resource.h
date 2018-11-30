@@ -15,6 +15,7 @@ class resource
 		int R_month;
 		int R_day;
 		int exist;	// 0 is already borrowed, 1 is exist in library
+		int size;
 	
 	public:
 		resource(string rn, string T);
@@ -28,6 +29,7 @@ class resource
 		int getR_day();
 		int borrow(string mn, int B_y, int B_m, int B_d, int R_y, int R_m, int R_d);
 		int giveBack(string mn, int N_y, int N_m, int N_d);
+		int getSize();
 	
 };
 
@@ -47,17 +49,16 @@ class magazine : public resource
 class e_book : public resource
 {
 	protected :
-		int size;
 	
 	public :
 		e_book(string rn, string T, int sz) : resource(rn, T){
 			size = sz;
 		}
 		int borrow(string mn, int B_y, int B_m, int B_d, int R_y, int R_m, int R_d){
-			resource :: borrow(mn, B_y, B_m, B_d, R_y, R_m, R_d);
+			int r = resource :: borrow(mn, B_y, B_m, B_d, R_y, R_m, R_d);
 			exist=1;
+			return r;
 		}
-		int getSize();
 
 };
 
