@@ -31,7 +31,7 @@ class member
 		void setMonth(int m);
 		void setDay(int d);
 		int borrow(int n_y, int n_m, int n_d);
-		void giveBack();
+		void giveBack(string RT, int sz);
 		int getSize();
 		int getLimitSize();
 		void setSize(int sz);

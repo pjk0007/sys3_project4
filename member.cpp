@@ -77,9 +77,10 @@ int member::borrow(int n_y, int n_m, int n_d)
 	}
 }
 
-void member::giveBack()
+void member::giveBack(string RT, int sz)
 {
-	nowBorrow--;
+	if(RT=="e-book") size-=sz;
+	else nowBorrow--;
 }
 
 int member::getSize()

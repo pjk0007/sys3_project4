@@ -132,7 +132,7 @@ library::library()
 				cout << "1	";	// return code 1
 				cout << "Non exist resource." <<endl;
 			}
-			else if(tempMem->borrow(year, month, day)==2){
+			else if(tempRes->getType()!="e-book" && tempMem->borrow(year, month, day)==2){
 				cout << "2	";
 				cout << "Exceeds your possible number of borrow. Possible # of borrows: ";
 				cout << tempMem->getBorrow() << endl;
@@ -148,7 +148,7 @@ library::library()
 					cout << setw(2) << setfill('0') << tempRes->getB_month() <<"/";
 					cout << setw(2) << setfill('0') << tempRes->getB_day() << endl;
 				}
-				else if(tempRes->borrow(tempMem->getName(), year, month, day, b_year, b_month, b_day)==2){
+				else if(tempRes->getType()!="e-book" && tempRes->borrow(tempMem->getName(), year, month, day, b_year, b_month, b_day)==2){
 					cout << "5	";
 					cout << "Other member already borrowed this ";
 					cout << tempRes->getType()<<". This " << tempRes->getType() <<" will be returned at ";
@@ -156,14 +156,16 @@ library::library()
 					cout << setw(2) << setfill('0') << tempRes->getR_month()<<"/";
 					cout << setw(2) << setfill('0') << tempRes->getR_day() <<endl;
 				}
-				else if(tempRes->getType()=="E-book" && tempMem->getLimitSize() < (tempMem->getSize()+tempRes->getSize())){
+				else if(tempRes->getType()=="e-book" && tempMem->getLimitSize() < (tempMem->getSize()+tempRes->getSize())){
 					cout << "15	Exceeds your storage capacity." << endl;
 				}
 				else {
-					if(tempRes->getType()!="E-book")
+					if(tempRes->getType()!="e-book"){
 						tempMem->setBorrow(tempMem->getBorrow()+1);
-					else
-						tempMem->setSize(tempMem->getSize()+tempMem->getSize());
+					}
+					else{
+						tempMem->setSize(tempMem->getSize()+tempRes->getSize());
+					}
 					cout << "0	Success." <<endl;
 				}
 			
@@ -178,7 +180,7 @@ library::library()
 		}
 		else if(BorR[0]=='R'){
 			if(tempRes->giveBack(tempMem->getName(), year, month, day) == 0){
-				tempMem->giveBack();
+				tempMem->giveBack(tempRes->getType(), tempRes->getSize());
 				cout << "0	Success." <<endl;
 			}
 			else if(tempRes->giveBack(tempMem->getName(), year, month, day) == 2){
@@ -193,7 +195,7 @@ library::library()
 				tempMem->setYear(b_year);
 				tempMem->setMonth(b_month);
 				tempMem->setDay(b_day);
-				tempMem->giveBack();
+				tempMem->giveBack(tempRes->getType(), tempRes->getSize());
 
 				cout << "7	Delayed return. You'll be restricted until ";
 				cout << setw(2) << setfill('0') << tempMem->getYear() <<"/";	

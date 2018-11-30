@@ -69,6 +69,11 @@ int resource::borrow(string mn, int B_y, int B_m, int B_d, int R_y, int R_m, int
 		R_month = R_m;
 		R_day = R_d;
 		exist = 0;
+		if(Type=="e-book"){
+			R_year=99;
+			R_month=99;
+			R_day=99;
+		}
 		return 0;	// Success.
 	}
 	else if(exist==0){
