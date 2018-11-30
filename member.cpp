@@ -12,7 +12,6 @@ member::member(string mn, string T)
 	ban_month=0;
 	ban_day=0;
 	size=0;
-	room_time_limit=3;
 	room = 0;
 	seat = 0;
 	room_num = 0;

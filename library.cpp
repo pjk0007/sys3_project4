@@ -317,7 +317,6 @@ library::library()
 				}
 			
 	
-<<<<<<< HEAD
 				if(BorR[0]=='B'){
 					if(exist==0){
 						cout << "1	";	// return code 1
@@ -371,8 +370,7 @@ library::library()
 				}
 				else if(BorR[0]=='R'){
 					if(tempRes->giveBack(tempMem->getName(), year, month, day) == 0){
-						tempMem->giveBack();
->>>>>>> add opcode -1 by try-catch (practice 1)
+						tempMem->giveBack(tempRes->getType(), tempRes->getSize());
 						cout << "0	Success." <<endl;
 					}
 					else if(tempRes->giveBack(tempMem->getName(), year, month, day) == 2){
@@ -387,7 +385,7 @@ library::library()
 						tempMem->setYear(b_year);
 						tempMem->setMonth(b_month);
 						tempMem->setDay(b_day);
-						tempMem->giveBack();
+						tempMem->giveBack(tempRes->getType(), tempRes->getSize());
 		
 						cout << "7	Delayed return. You'll be restricted until ";
 						cout << setw(2) << setfill('0') << tempMem->getYear() <<"/";	
