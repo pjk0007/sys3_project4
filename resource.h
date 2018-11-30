@@ -46,6 +46,17 @@ class magazine : public resource
 		magazine(string rn, string T) :resource(rn,T){}
 };
 
+class magazine_y_m : public magazine
+{
+	protected:
+		int made_year, made_month;
+	public :
+		magazine_y_m(string rn, string T, int year, int month) :magazine(rn, T){
+			made_year = year;
+			made_month = month;
+		}
+};
+
 class e_book : public resource
 {
 	protected :

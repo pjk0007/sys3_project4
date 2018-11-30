@@ -22,7 +22,7 @@ library::library()
 	string resName, resType, memName, memType;
 	char BorR[3];
 	int result;
-
+	int mag_y, mag_m;
 
 	fp = fopen("resource.dat", "r");
 	fscanf(fp, "%s", buf1);
@@ -92,6 +92,7 @@ library::library()
 		resName = buf2;
 		resType = buf1;
 		exist = 0;
+
 		for(i=0;i<RESLIST.size();i++){
 			if(RESLIST.at(i)->getName() == resName){
 				tempRes = RESLIST.at(i);
@@ -99,6 +100,59 @@ library::library()
 				break;
 			}
 		}
+
+		if(resType=="Magazine"){
+			char tmp_buf[10];
+			int len_size=0;
+			int buf2_size;
+			int flag=0;
+			string temp_name;
+
+
+			if(exist==0){
+				for(i=0;;i++){
+					if(buf2[i]==']'){
+						tmp_buf[len_size]='\0';
+						break;
+					}
+					if(flag==1){
+						tmp_buf[len_size]=buf2[i];
+						len_size++;
+						}
+					if(buf2[i]=='['){
+						flag=1;
+						buf2_size=i;
+					}
+				}
+				buf2[buf2_size]='\0';
+				temp_name=buf2;
+				buf1[0]=tmp_buf[0];
+				buf1[1]=tmp_buf[1];
+				buf1[2]='\0';
+				buf2[0]=tmp_buf[3];
+				buf2[1]=tmp_buf[4];
+				buf2[2]='\0';
+				mag_y=atoi(buf1);	
+				mag_m=atoi(buf2);
+
+				for(i=0;i<RESLIST.size();i++){
+					if(RESLIST.at(i)->getName() == temp_name){
+						exist++;
+						break;
+					}
+				}
+				if(exist==1 && mag_y*12+mag_m>year*12+month-12 && mag_y*12+mag_m<=year*12+month){
+					RESLIST.push_back(new magazine_y_m(resName, resType, mag_y, mag_m));
+					tempRes = RESLIST.back();
+				}
+				else exist=0;
+			}
+			else if(exist==1){
+				if(mag_y*12+mag_m>year*12+month-12 && mag_y*12+mag_m<=year*12+month) exist==1;
+				else exist=0;
+			}
+		}
+
 		fscanf(fp, "%s", BorR);
 
 		fscanf(fp, "%s", buf1);
