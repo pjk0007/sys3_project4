@@ -11,6 +11,7 @@ member::member(string mn, string T)
 	ban_year=0;
 	ban_month=0;
 	ban_day=0;
+	size=0;
 }
 
 string member::getName()

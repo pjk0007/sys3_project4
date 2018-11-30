@@ -164,6 +164,12 @@ library::library()
 			if(memType=="Undergraduate"){
 				MEMLIST.push_back(new undergraduate(buf2, buf1));
 			}
+			else if(memType=="Graduate"){
+				MEMLIST.push_back(new graduate(buf2, buf1));
+			}
+			else if(memType=="Faculty"){
+				MEMLIST.push_back(new faculty(buf2, buf1));
+			}
 			tempMem = MEMLIST.back();
 		}
 		else{
@@ -175,6 +181,12 @@ library::library()
 				else if(i==MEMLIST.size()-1){
 					if(memType=="Undergraduate"){
 						MEMLIST.push_back(new undergraduate(buf2, buf1));
+					}
+					else if(memType=="Graduate"){
+						MEMLIST.push_back(new graduate(buf2, buf1));
+					}
+					else if(memType=="Faculty"){
+						MEMLIST.push_back(new faculty(buf2, buf1));
 					}
 					tempMem = MEMLIST.back();
 				}

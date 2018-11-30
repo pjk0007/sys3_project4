@@ -43,9 +43,28 @@ class undergraduate : public member
 		undergraduate(string rn, string T) : member(rn, T){
 			canBorrow = 1;
 			term = 13;
-			size=0;
 			limit_size = 100;
 		}
 };
 
+class graduate : public member
+{
+	public :
+		graduate(string rn, string T) : member(rn, T){
+			canBorrow = 5;
+			term = 29;
+			limit_size = 500;
+		}
+};
+
+
+class faculty : public member
+{
+	public :
+		faculty(string rn, string T) : member(rn, T){
+			canBorrow = 10;
+			term = 29;
+			limit_size = 1000;
+		}
+};
 #endif
