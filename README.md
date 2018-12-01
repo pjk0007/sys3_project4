@@ -1,10 +1,12 @@
 # System Software Experiment 3
-## Project 1: Library Management
+## Project 3: Extended Library Management
 ### Profect dexcription
  This program reads the `resource.dat` and `input.dat` and `space.dat` files from the library class and processes them according to the order of the input and generates output.
 The main function only generated the library and the function that generates the library reads the file and stores and processes the data.
 First, read the file `resource.dat` and save the contents of the data to the Vector declared as resource data type.
 Read the `input.dat` file and `space.dat` file to store the vector declared as the member data type and process the input order using the information of each vector.
+ For practice 1, which was given in class, the try-catch caught the exception.
+ In project1, new resource classes and members classes were added. Revised project1 was re-baseed as project2. In project2, we added a space policy for the added members of the member class and merge with the project1.
 
 Getting started
 -----
@@ -85,6 +87,7 @@ class resource
 		int getR_day();
 		int borrow(string mn, int B_y, int B_m, int B_d, int R_y, int R_m, int R_d);
 		int giveBack(string mn, int N_y, int N_m, int N_d);
+		int getSize();
 };
 ```
 ```
@@ -106,7 +109,7 @@ int resource::giveBack(string mn, int N_y, int N_m, int N_d)
 - Return 1 when delayed return.
 - Return 2 when you did not borrow this `Type`.
 
-#### book class
+#### book / magazine / e_book class
 ```
 class book : public resource
 {
@@ -115,6 +118,38 @@ class book : public resource
 };
 ```
 The book class is inherited from the resource class.
+```
+class magazine : public resource
+{
+	public :
+		magazine(string rn, string T) :resource(rn,T){}
+};
+
+class magazine_y_m : public magazine
+{
+	protected:
+		int made_year, made_month;
+	public :
+		magazine_y_m(string rn, string T, int year, int month) :magazine(rn, T){
+			made_year = year;
+			made_month = month;
+		}
+};
+```
+The magazine class is the magazine except the year and the month, and the magazine_y_m class is the magazine containing the year and month.
+
+```
+class e_book : public resource
+{
+	protected :
+	
+	public :
+		e_book(string rn, string T, int sz) : resource(rn, T){
+			size = sz;
+		}
+}
+```
+The e_book class also stores size;
 
 ### member.h
 #### member class
@@ -246,7 +281,7 @@ This function is a function that is called when you try to comeback at spcae, an
 Return what you did in Empty function.
 
 
-#### undergraduate class
+#### undergraduate / graduate / faculty class
 ```
 class undergraduate : public member
 {
@@ -254,10 +289,33 @@ class undergraduate : public member
 		undergraduate(string rn, string T) : member(rn, T){
 			canBorrow = 1;
 			term = 13;
+			limit_size = 100;
 		}
 };
 ```
-The undergraduate class is inherited from the member class.
+```
+class graduate : public member
+{
+	public :
+		graduate(string rn, string T) : member(rn, T){
+			canBorrow = 5;
+			term = 29;
+			limit_size = 500;
+		}
+};
+```
+```
+class faculty : public member
+{
+	public :
+		faculty(string rn, string T) : member(rn, T){
+			canBorrow = 10;
+			term = 29;
+			limit_size = 1000;
+		}
+};
+```
+The undergraduate, graduate, faculty class is inherited from the member class.
 
 ### space.h
 #### space class
