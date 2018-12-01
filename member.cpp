@@ -18,6 +18,7 @@ member::member(string mn, string T)
 	seat_num=0;
 	seat_time=0;
 	room_time=0;
+	seat_time_limit = 3;
 }
 
 string member::getName()

@@ -68,7 +68,6 @@ class undergraduate : public member
 			canBorrow = 1;
 			term = 13;
 			limit_size = 100;
-			seat_time_limit = 3;
 		}
 };
 
