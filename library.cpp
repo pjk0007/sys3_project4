@@ -156,8 +156,8 @@ library::library()
 		}
 		else file_end2=0;
 
-		date1 = year1*360+month1*12+day1;
-		date2 = (year2%100)*360+month2*12+day2;
+		date1 = year1*360+month1*30+day1;
+		date2 = (year2%100)*360+month2*30+day2;
 
 		if(file_end1<1 && file_end2<1) break;
 
@@ -185,7 +185,6 @@ library::library()
 			resName = buf2;
 			resType = buf1;
 			exist = 0;
-		
 			for(i=0;i<RESLIST.size();i++){
 				if(RESLIST.at(i)->getName() == resName){
 					tempRes = RESLIST.at(i);
@@ -201,32 +200,32 @@ library::library()
 				int flag=0;
 				string temp_name;
 	
-	
-				if(exist==0){
-					for(i=0;;i++){
-						if(buf2[i]==']'){
-							tmp_buf[len_size]='\0';
-							break;
-						}
-						if(flag==1){
-							tmp_buf[len_size]=buf2[i];
-						len_size++;
-							}
-						if(buf2[i]=='['){
-							flag=1;
-							buf2_size=i;
-						}
+				for(i=0;;i++){
+					if(buf2[i]==']'){
+						tmp_buf[len_size]='\0';
+						break;
 					}
-					buf2[buf2_size]='\0';
-					temp_name=buf2;
-					buf1[0]=tmp_buf[0];
-					buf1[1]=tmp_buf[1];
-					buf1[2]='\0';
-					buf2[0]=tmp_buf[3];
-					buf2[1]=tmp_buf[4];
-					buf2[2]='\0';
-					mag_y=atoi(buf1);	
-					mag_m=atoi(buf2);
+					if(flag==1){
+						tmp_buf[len_size]=buf2[i];
+					len_size++;
+						}
+					if(buf2[i]=='['){
+						flag=1;
+						buf2_size=i;
+					}
+				}
+				buf2[buf2_size]='\0';
+				temp_name=buf2;
+				buf1[0]=tmp_buf[0];
+				buf1[1]=tmp_buf[1];
+				buf1[2]='\0';
+				buf2[0]=tmp_buf[3];
+				buf2[1]=tmp_buf[4];
+				buf2[2]='\0';
+				mag_y=atoi(buf1);	
+				mag_m=atoi(buf2);
+
+				if(exist==0){
 	
 					for(i=0;i<RESLIST.size();i++){
 						if(RESLIST.at(i)->getName() == temp_name){
@@ -315,9 +314,12 @@ library::library()
 						}
 					}
 				}
-			
-	
 				if(BorR[0]=='B'){
+					int didnt_return=0;
+					for(int i=0;i<RESLIST.size();i++){
+						if(RESLIST.at(i)->getType()!="e-book" && RESLIST.at(i)->getMemName()==memName &&
+							RESLIST.at(i)->getR_year()*360+RESLIST.at(i)->getR_month()*30+RESLIST.at(i)->getR_day()<=date1) didnt_return=1;
+					}
 					if(exist==0){
 						cout << "1	";	// return code 1
 						cout << "Non exist resource." <<endl;
@@ -327,7 +329,7 @@ library::library()
 						cout << "Exceeds your possible number of borrow. Possible # of borrows: ";
 						cout << tempMem->getBorrow() << endl;
 					}
-					else if(tempMem->borrow(year, month, day)==0){
+					else if(tempMem->borrow(year, month, day)==0 || (tempMem->borrow(year,month,day)==2 && tempRes->getType()=="e-book")){
 						b_year = (year*360+month*30+day + tempMem->getTerm()) / 360;
 						b_month = ((year*360+month*30+day + tempMem->getTerm()) - b_year*360) / 30;
 						b_day = ((year*360+month*30+day + tempMem->getTerm()) - b_year*360 - b_month*30);
@@ -349,6 +351,9 @@ library::library()
 						else if(tempRes->getType()=="e-book" && tempMem->getLimitSize() < (tempMem->getSize()+tempRes->getSize())){
 							cout << "15	Exceeds your storage capacity." << endl;
 						}
+						else if(didnt_return ==1){
+							cout << "16	Previously borrowed books are overdue, so borrow is limited."<<endl;
+						}
 						else {
 							if(tempRes->getType()!="e-book"){
 								tempMem->setBorrow(tempMem->getBorrow()+1);
@@ -369,11 +374,12 @@ library::library()
 	
 				}
 				else if(BorR[0]=='R'){
-					if(tempRes->giveBack(tempMem->getName(), year, month, day) == 0){
+					Op=tempRes->giveBack(tempMem->getName(), year, month, day);
+					if(Op == 0){
 						tempMem->giveBack(tempRes->getType(), tempRes->getSize());
 						cout << "0	Success." <<endl;
 					}
-					else if(tempRes->giveBack(tempMem->getName(), year, month, day) == 2){
+					else if(Op == 2){
 						cout << "3	You did not borrow this "<< tempRes->getType() <<"."<<endl;
 					}
 					else{

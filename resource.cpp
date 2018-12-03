@@ -94,6 +94,8 @@ int resource::giveBack(string mn, int N_y, int N_m, int N_d)
 		return 0;	// Success.
 	}
 	else if(mem_Name == mn && N_y*360+N_m*30+N_d >= R_year*360+R_month*30+R_day){
+		mem_Name = "NULL";
+		exist = 1;
 		return 1;	// Delayed return. You'll be restricted untill 00/00/00 
 	}
 	else if(mem_Name != mn){
@@ -106,3 +108,9 @@ int resource::getSize()
 {
 	return size;
 }
+
+string resource::getMemName()
+{
+	return mem_Name;
+}
+

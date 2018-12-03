@@ -30,6 +30,8 @@ class resource
 		int borrow(string mn, int B_y, int B_m, int B_d, int R_y, int R_m, int R_d);
 		int giveBack(string mn, int N_y, int N_m, int N_d);
 		int getSize();
+
+		string getMemName();
 	
 };
 
