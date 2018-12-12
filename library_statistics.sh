@@ -96,6 +96,8 @@ then
 
 elif [ $1 = "space" ]
 then
+	mv input.dat result
+	mv space.dat result
 	if [ ! -d ./result/space ]
 	then
 		mkdir ./result/space
@@ -109,41 +111,57 @@ then
 	then
 		if [ $3 = "all" ]
 		then
-			cat space.dat | awk -F'\t' '{if($2=="StudyRoom") print}' > ./result/space/studyroom.dat
+			cat ./result/space.dat | awk -F'\t' '{if($2=="StudyRoom") print}' > space.dat
+			./start > ./result/space/studyroom.dat
 		
 		else
-			cat space.dat | awk -F'\t' '{if($2=="StudyRoom" && $3=='$3') print}' > ./result/space/studyroom.dat
+			cat ./result/space.dat | awk -F'\t' '{if($2=="StudyRoom" && $3=='$3') print}' > space.dat
+			./start > ./result/space/studyroom.dat
 		fi
 
 	elif [ $2 = "seat" ]
 	then
 		if [ $3 = "all" ]
 		then
-			cat space.dat | awk -F'\t' '{if($2=="Seat") print}' > ./result/space/seat.dat
+			cat ./result/space.dat | awk -F'\t' '{if($2=="Seat") print}' > space.dat
+			./start > ./result/space/seat.dat
 		
 		else
-			cat space.dat | awk -F'\t' '{if($2=="Seat" && $3=='$3') print}' > ./result/space/seat.dat
+			cat ./result/space.dat | awk -F'\t' '{if($2=="Seat" && $3=='$3') print}' > space.dat
+			./start > ./result/space/seat.dat
 		fi
 	elif [ $2 = "undergraduate" ]
 	then
-		cat space.dat | awk -F'\t' '{if($5=="Undergraduate") print}' > ./result/space/undergraduate.dat
+		cat ./result/space.dat | awk -F'\t' '{if($5=="Undergraduate") print}' > space.dat
+		./start > ./result/space/undergraduate.dat
 
 	elif [ $2 = "graduate" ]
 	then
-		cat space.dat | awk -F'\t' '{if($5=="Graduate") print}' > ./result/space/graduate.dat
+		cat ./result/space.dat | awk -F'\t' '{if($5=="Graduate") print}' > space.dat
+		./start > ./result/space/greaduate.dat
 
 	elif [ $2 = "faculty" ]
 	then
-		cat space.dat | awk -F'\t' '{if($5=="Faculty") print}' > ./result/space/faculty.dat
+		cat ./result/space.dat | awk -F'\t' '{if($5=="Faculty") print}' > space.dat
+		./start > ./result/space/faculty.dat
 
 	elif [ $2 = "all" ]
 	then
-		cat space.dat | awk -F'\t' '{if($2=="StudyRoom") print}' > ./result/space/studyroom.dat
-		cat space.dat | awk -F'\t' '{if($2=="Seat") print}' > ./result/space/seat.dat
-		cat space.dat | awk -F'\t' '{if($5=="Undergraduate") print}' > ./result/space/undergraduate.dat
-		cat space.dat | awk -F'\t' '{if($5=="Graduate") print}' > ./result/space/graduate.dat
-		cat space.dat | awk -F'\t' '{if($5=="Faculty") print}' > ./result/space/faculty.dat
+		cat ./result/space.dat | awk -F'\t' '{if($2=="StudyRoom") print}' > space.dat
+		./start > ./result/space/studyroom.dat
+		cat ./result/space.dat | awk -F'\t' '{if($2=="Seat") print}' > space.dat
+		./start > ./result/space/seat.dat
+		cat ./result/space.dat | awk -F'\t' '{if($5=="Undergraduate") print}' > space.dat
+		./start > ./result/space/undergraduate.dat
+		cat ./result/space.dat | awk -F'\t' '{if($5=="Graduate") print}' > space.dat
+		./start > ./result/space/greaduate.dat
+		cat ./result/space.dat | awk -F'\t' '{if($5=="Faculty") print}' > space.dat
+		./start > ./result/space/faculty.dat
+
 	fi
+	rm space.dat
+	mv ./result/input.dat .
+	mv ./result/space.dat .
 
 elif [ $1 = "output" ]
 then
