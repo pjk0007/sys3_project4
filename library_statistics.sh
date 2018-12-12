@@ -154,7 +154,7 @@ then
 		cat ./result/space.dat | awk -F'\t' '{if($5=="Undergraduate") print}' > space.dat
 		./start > ./result/space/undergraduate.dat
 		cat ./result/space.dat | awk -F'\t' '{if($5=="Graduate") print}' > space.dat
-		./start > ./result/space/greaduate.dat
+		./start > ./result/space/graduate.dat
 		cat ./result/space.dat | awk -F'\t' '{if($5=="Faculty") print}' > space.dat
 		./start > ./result/space/faculty.dat
 
@@ -165,8 +165,20 @@ then
 
 elif [ $1 = "output" ]
 then
+	if [ ! -d ./result/output ]
+	then
+		mkdir ./result/output
+	fi
 	if [ $2 = "stat_table" ]
 	then
-		echo "not yet"
+		echo "Return_code	Number" > ./result/output/stat_table.dat
+		./start > output.dat
+		x=0
+		until [ $x -gt 16 ]
+		do
+			sum=0
+			cat output.dat | awk 'BEGIN {X=0} {if($2=='$x') X++ } END{print '$x'"\t"X}' >> ./result/output/stat_table.dat
+			((x++))
+		done
 	fi
 fi
