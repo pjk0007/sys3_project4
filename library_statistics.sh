@@ -43,50 +43,70 @@ then
 
 	if [ $2 = "date" ]
 	then
-		echo "not yet"
+		head -n 1 ./result/input.dat > input.dat 
+		echo "$3" | awk -F'/' '{print $1*360+$2*30+$3}' | bc > from.dat
+		read from < from.dat
+		echo "$4" | awk -F'/' '{print $1*360+$2*30+$3}' | bc > to.dat
+		read to < to.dat
+		cat ./result/input.dat | awk -F '\/' '{if($1*360+$2*30+$3 >= '$from' && $1*360+$2*30+$3 <= '$to') print}' >> input.dat
+		./start > ./result/input/date.dat
+		rm from.dat
+		rm to.dat
 	elif [ $2 = "book" ]
 	then
-		cat ./result/input.dat | awk -F'\t' '{if($2=="Book") print}' >input.dat
+		head -n 1 ./result/input.dat > input.dat 
+		cat ./result/input.dat | awk -F'\t' '{if($2=="Book") print}' >>input.dat
 		./start > ./result/input/book.dat
 
 	elif [ $2 = "e-book" ]
 	then
-		cat ./result/input.dat | awk -F'\t' '{if($2=="E-book") print}' > input.dat
+		head -n 1 ./result/input.dat > input.dat
+		cat ./result/input.dat | awk -F'\t' '{if($2=="E-book") print}' >> input.dat
 		./start > ./result/input/e-book.dat
 
 	elif [ $2 = "magazine" ]
 	then
-		cat ./result/input.dat | awk -F'\t' '{if($2=="Magazine") print}' > input.dat
+		head -n 1 ./result/input.dat > input.dat
+		cat ./result/input.dat | awk -F'\t' '{if($2=="Magazine") print}' >> input.dat
 		./start > ./result/input/magazine.dat
 
 	elif [ $2 = "undergraduate" ]
 	then
-		cat ./result/input.dat | awk -F'\t' '{if($5=="Undergraduate") print}' > input.dat
+		head -n 1 ./result/input.dat > input.dat
+		cat ./result/input.dat | awk -F'\t' '{if($5=="Undergraduate") print}' >> input.dat
 		./start > ./result/input/undergraduate.dat
 
 	elif [ $2 = "graduate" ]
 	then
-		cat ./result/input.dat | awk -F'\t' '{if($5=="Graduate") print}' > input.dat
+		head -n 1 ./result/input.dat > input.dat
+		cat ./result/input.dat | awk -F'\t' '{if($5=="Graduate") print}' >> input.dat
 		./start > ./result/input/graduate.dat
 
 	elif [ $2 = "faculty" ]
 	then
-		cat ./result/input.dat | awk -F'\t' '{if($5=="Faculty") print}' > input.dat
+		head -n 1 ./result/input.dat > input.dat
+		cat ./result/input.dat | awk -F'\t' '{if($5=="Faculty") print}' >> input.dat
 		./start > ./result/input/faculty.dat
 
 	elif [ $2 = "all" ]
 	then
-		cat ./result/input.dat | awk -F'\t' '{if($2=="Book") print}' >input.dat
+		head -n 1 ./result/input.dat > input.dat 
+		cat ./result/input.dat | awk -F'\t' '{if($2=="Book") print}' >>input.dat
 		./start > ./result/input/book.dat
-		cat ./result/input.dat | awk -F'\t' '{if($2=="E-book") print}' > input.dat
+		head -n 1 ./result/input.dat > input.dat
+		cat ./result/input.dat | awk -F'\t' '{if($2=="E-book") print}' >> input.dat
 		./start > ./result/input/e-book.dat
-		cat ./result/input.dat | awk -F'\t' '{if($2=="Magazine") print}' > input.dat
+		head -n 1 ./result/input.dat > input.dat
+		cat ./result/input.dat | awk -F'\t' '{if($2=="Magazine") print}' >> input.dat
 		./start > ./result/input/magazine.dat
-		cat ./result/input.dat | awk -F'\t' '{if($5=="Undergraduate") print}' > input.dat
+		head -n 1 ./result/input.dat > input.dat
+		cat ./result/input.dat | awk -F'\t' '{if($5=="Undergraduate") print}' >> input.dat
 		./start > ./result/input/undergraduate.dat
-		cat ./result/input.dat | awk -F'\t' '{if($5=="Graduate") print}' > input.dat
+		head -n 1 ./result/input.dat > input.dat
+		cat ./result/input.dat | awk -F'\t' '{if($5=="Graduate") print}' >> input.dat
 		./start > ./result/input/graduate.dat
-		cat ./result/input.dat | awk -F'\t' '{if($5=="Faculty") print}' > input.dat
+		head -n 1 ./result/input.dat > input.dat
+		cat ./result/input.dat | awk -F'\t' '{if($5=="Faculty") print}' >> input.dat
 		./start > ./result/input/faculty.dat
 
 	fi
@@ -105,17 +125,27 @@ then
 
 	if [ $2 = "date" ]
 	then
-		echo "not yet"
+		head -n 1 ./result/space.dat > space.dat
+		echo "$3" | awk -F'/' '{print 20$1$2$3$4}' | bc > from.dat 
+		read from < from.dat
+		echo "$4" | awk -F'/' '{print 20$1$2$3$4}' | bc > to.dat
+		read to < to.dat
+		cat ./result/space.dat | awk -F '\/' '{if($1$2$3$4 >= '$from' && $1$2$3$4 <= '$to') print}' >> space.dat
+		./start > ./result/space/date.dat
+		rm from.dat
+		rm to.dat
 
 	elif [ $2 = "studyroom" ]
 	then
 		if [ $3 = "all" ]
 		then
-			cat ./result/space.dat | awk -F'\t' '{if($2=="StudyRoom") print}' > space.dat
+			head -n 1 ./result/space.dat > space.dat
+			cat ./result/space.dat | awk -F'\t' '{if($2=="StudyRoom") print}' >> space.dat
 			./start > ./result/space/studyroom.dat
 		
 		else
-			cat ./result/space.dat | awk -F'\t' '{if($2=="StudyRoom" && $3=='$3') print}' > space.dat
+			head -n 1 ./result/space.dat > space.dat
+			cat ./result/space.dat | awk -F'\t' '{if($2=="StudyRoom" && $3=='$3') print}' >> space.dat
 			./start > ./result/space/studyroom.dat
 		fi
 
@@ -123,39 +153,49 @@ then
 	then
 		if [ $3 = "all" ]
 		then
-			cat ./result/space.dat | awk -F'\t' '{if($2=="Seat") print}' > space.dat
+			head -n 1 ./result/space.dat > space.dat
+			cat ./result/space.dat | awk -F'\t' '{if($2=="Seat") print}' >> space.dat
 			./start > ./result/space/seat.dat
 		
 		else
-			cat ./result/space.dat | awk -F'\t' '{if($2=="Seat" && $3=='$3') print}' > space.dat
+			head -n 1 ./result/space.dat > space.dat
+			cat ./result/space.dat | awk -F'\t' '{if($2=="Seat" && $3=='$3') print}' >> space.dat
 			./start > ./result/space/seat.dat
 		fi
 	elif [ $2 = "undergraduate" ]
 	then
-		cat ./result/space.dat | awk -F'\t' '{if($5=="Undergraduate") print}' > space.dat
+		head -n 1 ./result/space.dat > space.dat
+		cat ./result/space.dat | awk -F'\t' '{if($5=="Undergraduate") print}' >> space.dat
 		./start > ./result/space/undergraduate.dat
 
 	elif [ $2 = "graduate" ]
 	then
-		cat ./result/space.dat | awk -F'\t' '{if($5=="Graduate") print}' > space.dat
+		head -n 1 ./result/space.dat > space.dat
+		cat ./result/space.dat | awk -F'\t' '{if($5=="Graduate") print}' >> space.dat
 		./start > ./result/space/greaduate.dat
 
 	elif [ $2 = "faculty" ]
 	then
-		cat ./result/space.dat | awk -F'\t' '{if($5=="Faculty") print}' > space.dat
+		head -n 1 ./result/space.dat > space.dat
+		cat ./result/space.dat | awk -F'\t' '{if($5=="Faculty") print}' >> space.dat
 		./start > ./result/space/faculty.dat
 
 	elif [ $2 = "all" ]
 	then
-		cat ./result/space.dat | awk -F'\t' '{if($2=="StudyRoom") print}' > space.dat
+		head -n 1 ./result/space.dat > space.dat
+		cat ./result/space.dat | awk -F'\t' '{if($2=="StudyRoom") print}' >> space.dat
 		./start > ./result/space/studyroom.dat
-		cat ./result/space.dat | awk -F'\t' '{if($2=="Seat") print}' > space.dat
+		head -n 1 ./result/space.dat > space.dat
+		cat ./result/space.dat | awk -F'\t' '{if($2=="Seat") print}' >> space.dat
 		./start > ./result/space/seat.dat
-		cat ./result/space.dat | awk -F'\t' '{if($5=="Undergraduate") print}' > space.dat
+		head -n 1 ./result/space.dat > space.dat
+		cat ./result/space.dat | awk -F'\t' '{if($5=="Undergraduate") print}' >> space.dat
 		./start > ./result/space/undergraduate.dat
-		cat ./result/space.dat | awk -F'\t' '{if($5=="Graduate") print}' > space.dat
+		head -n 1 ./result/space.dat > space.dat
+		cat ./result/space.dat | awk -F'\t' '{if($5=="Graduate") print}' >> space.dat
 		./start > ./result/space/graduate.dat
-		cat ./result/space.dat | awk -F'\t' '{if($5=="Faculty") print}' > space.dat
+		head -n 1 ./result/space.dat > space.dat
+		cat ./result/space.dat | awk -F'\t' '{if($5=="Faculty") print}' >> space.dat
 		./start > ./result/space/faculty.dat
 
 	fi
